@@ -1,26 +1,52 @@
 const http = require("http");
 
-const server=http.createServer((req, res)=>{
+const users = [
+    { id: 1, name: "John Doe", email: "john@example.com" },
+    { id: 2, name: "Jane Doe", email: "jane@example.com" },
+    { id: 3, name: "Jim Doe", email: "jim@example.com" },
+    { id: 4, name: "Jack Doe", email: "jack@example.com" },
+];
+
+const server = http.createServer((req, res) => {
     console.log(req.url);
     console.log(req.headers);
-    if(req.url=="/"&& req.method=="GET"){
-    res.writeHead(200, {"Content-Type":"text/html"});
-    res.write("<h1>Hello World</h1>");
-    res.end();
-}else if(req.url=="/about"&& req.method=="GET"){
-    res.writeHead(200, {"Content-Type":"text/html"});
-    res.write("<h1>About Page</h1>");
-    res.end();
-}else if(req.url=="/contact"&& req.method=="GET"){
-    res.writeHead(200, {"Content-Type":"text/html"});
-    res.write("<h1>Contact Page</h1>");
-    res.end();
-}else if(req.url=="/api/users"&& req.method=="GET"){
-    res.writeHead(200, {"Content-Type":"application/json"});
-    res.write("Page not found")
-}
-res.end()})
 
-server.listen(3000,()=>{
-    console.log("server is running on port 3000")
+    if (req.url === "/" && req.method === "GET") {
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.write("<h1>Hello World</h1>");
+        res.end();
+    } else if (req.url === "/about" && req.method === "GET") {
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.write("<h1>About Page</h1>");
+        res.end();
+    } else if (req.url === "/contact" && req.method === "GET") {
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.write("<h1>Contact Page</h1>");
+        res.end();
+    } else if (req.url === "/users" && req.method === "GET") {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.write(JSON.stringify(users));
+        res.end();
+    } else if (req.url === "/users" && req.method === "POST") {
+        let body = "";
+        req.on("data", (chunk) => {
+            console.log(chunk);
+            body += chunk;
+        });
+        req.on("end", () => {
+            const user = JSON.parse(body);
+            users.push(user);
+            res.writeHead(201, { "Content-Type": "application/json" });
+            res.write(JSON.stringify({ success: true, message: "User created successfully" }));
+            res.end();
+        });
+    } else {
+        res.writeHead(404, { "Content-Type": "text/html" });
+        res.write("Page not found");
+        res.end();
+    }
+});
+
+server.listen(3000, () => {
+    console.log("Server is running on port 3000");
 });
