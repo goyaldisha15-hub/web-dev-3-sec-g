@@ -12,10 +12,12 @@ const employees=[
     {empId: 5, empName: 'David Wilson', empSalary: 65000, department: 'IT'}
 ]
 
+//read opt
 app.get('/employees', (req, res) => {
     res.json(employees);
 });
 
+//employee by id
 app.get('/employees/:empId', (req, res) => {
     const id = req.params.empId;
     const employee = employees.find(employee => employee.empId == Number(id));
