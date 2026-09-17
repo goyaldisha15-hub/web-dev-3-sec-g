@@ -10,7 +10,7 @@ app.get("/:id",(req,res)=>{
     console.log(req.params.id)
     res.send("Hello Students from id route");
 })
-
+ 
 app.get("/",(req,res)=>{
     console.log(req.query.name)
     console.log(req.query.age)
