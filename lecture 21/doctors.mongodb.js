@@ -64,7 +64,7 @@ use("HospitalDB")
 // db.doctors.find()
 
 //create operation
-///1. insert   2. insertOne  3. insertMany
+// 1. insert   2. insertOne  3. insertMany
 // db.doctors.insert({
 //     name:"Dr. Abhijeet",
 //     specialization:"Cardiologist",
@@ -119,3 +119,33 @@ use("HospitalDB")
 //1. deleteOne()  2. deleteMany()
 // db.doctors.deleteOne({name:"Dr. Abhijeet"})
 // db.doctors.deleteMany({specialization:"Cardiologist"})
+
+// db.doctors.find(
+//     {
+//         fees:{$gt:300}
+//     }
+// )
+
+// db.doctors.find(
+//     {
+//         department:"Cardiology",
+//             fees:{
+//                 $gte:300
+//         }
+//     }
+// )
+
+// db.doctors.find(
+//     {
+//         $or:[
+//             {department:"Cardiology"},
+//             {fees:{$gte:300}}
+//         ]
+//     }
+// )
+
+// db.doctors.find({}, {name: 1, department: 1, _id: 0})
+// db.doctors.find().limit(2)
+// db.doctors.find().skip(2).limit(2)
+// db.doctors.find().sort({fees:1}) //ascending order
+// db.doctors.find().sort({fees:-1}) //descending order
