@@ -1,18 +1,19 @@
+// 10,2 no middleware
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const PORT = 3000;
 
-app.use(morgan()) // third party middleware for logging requests
+// app.use(morgan()) // third party middleware for logging requests
 
-// const logMiddleware = (req, res, next) => {
-//     console.log('req.name:', req.name);
-//     req.name = 'John Doe';
-//     console.log(`${req.method} ${req.url}`);
-//     console.log("Time:", new Date().toLocaleString());
-//     res.send("Hello from middleware");
-//     next();
-// }
+const logMiddleware = (req, res, next) => {
+    console.log('req.name:', req.name);
+    req.name = 'John Doe';
+    console.log(`${req.method} ${req.url}`);
+    console.log("Time:", new Date().toLocaleString());
+    // res.send("Hello from middleware");
+    next();
+}
 
 const apiCheckMiddleware = (req, res, next) => {
     if(req.query.API_KEY==="1234") {
@@ -23,8 +24,8 @@ const apiCheckMiddleware = (req, res, next) => {
     }
 }
 
-// app.use(logMiddleware);
-app.use(apiCheckMiddleware);
+app.use(logMiddleware);
+// app.use(apiCheckMiddleware); // global middleware, will be applied to all routes
 
 app.get('/', (req, res) => {
     console.log('request name:', req.name);
@@ -32,9 +33,9 @@ app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
 
-app.get('/data', (req, res) => {
+app.get('/data',apiCheckMiddleware, (req, res) => {    // route specific middleware, will be applied only to this route
     console.log('request name:', req.name);
-    console.log("Time:", new Date().toLocaleString());
+    // console.log("Time:", new Date().toLocaleString());
     // res.send('Data from the API');
     res.json({
         city: 'New York',
