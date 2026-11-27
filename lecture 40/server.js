@@ -1,31 +1,34 @@
-const express=require('express');
-const http=require('http');
-const app=express();
-const socketIo=require('socket.io');
-const port=3000;
 
+const express = require("express");
+const http = require("http");
+const socket = require("socket.io");
+const app = express();
+const port=3000
+const server = http.createServer(app);
 
-const server=http.createServer(app);
-
-const io=new socketIo.Server(server,
-    {
-        cors: {
-            origin: '',
-            methods: ['GET', 'POST']
-    } 
-}
-);
-
-io.on('connection',(socket)=>{
-    console.log('user connected with socket id:',socket.id);
-    io.on("message",(msg)=>{
-        socket.emit(msg);
-    });
-    socket.on('disconnect',()=>{
-        console.log("user disconnected");
-    });
+const io = new socket.Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
 });
 
-server.listen(port,()=>{
-    console.log(`Server is running on port ${port}`);
+io.on("connection", (socket) => {
+
+    console.log("User connected:", socket.id);
+
+    socket.on("message", (msg) => {
+
+        io.emit("message", msg);
+
+    });
+
+    socket.on("disconnect", () => {
+        console.log("User disconnected:", socket.id);
+    });
+
+});
+
+server.listen(port, () => {
+    console.log("Server running at port 3000");
 });

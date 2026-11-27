@@ -7,8 +7,11 @@ wsServer.on('connection', (socket) => {
     
     socket.on('message', (message) => {
         console.log(`Received message: ${message}`);
-        socket.send(`message: ${message}`);
-    }); 
+        // socket.send(`message: ${message}`);
+        wsServer.clients.forEach((client)=>{
+            client.send(`message: ${message}`)
+        })
+    });
 
     socket.on('close', () => {
         console.log('Client disconnected');
